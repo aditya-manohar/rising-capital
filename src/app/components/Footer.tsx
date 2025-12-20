@@ -1,3 +1,4 @@
+//Footer.tsx
 import Link from 'next/link'
 // import Image from 'next/image'
 import { Linkedin, Twitter, Instagram, Youtube } from 'lucide-react'
@@ -46,7 +47,7 @@ const Footer = () => {
         {
             icon: <Linkedin className="w-5 h-5" />,
             name: "LinkedIn",
-            href: ""
+            href: "https://www.linkedin.com/in/jinil-patel-5b13451a8/"
         },
         {
             icon: <Twitter className="w-5 h-5" />,

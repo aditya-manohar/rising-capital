@@ -1,13 +1,17 @@
 import Navbar from '@/app/components/Navbar';
 import Hero from '@/app/components/Hero';
-import Stats from '@/app/components/Stats';
+// import Stats from '@/app/components/Stats';
 import About from '@/app/components/About';
-import Features from '@/app/components/Features';
-import Testimonials from '@/app/components/Testimonials';
-import BlogSection from '@/app/components/Blog';
+// import Features from '@/app/components/Features';
+// import Testimonials from '@/app/components/Testimonials';
+// import BlogSection from '@/app/components/Blog';
 import FAQ from '@/app/components/FAQ';
-import CTA from '@/app/components/CTA';
+// import CTA from '@/app/components/CTA';
 import Footer from '@/app/components/Footer';
+// import VideoIntro from './components/VideoIntro';
+import VideoSeries from './components/VideoSeries';
+import CEOSection from './components/CEOSection';
+import LinkedInEmbed from './components/LinkedInCarousel';
 
 export default function Home() {
   return (
@@ -15,13 +19,16 @@ export default function Home() {
       <Navbar />
       <main className="overflow-hidden">
         <Hero />
-        <Stats />
+        {/* <Stats /> */}
+        <CEOSection />
         <About />
-        <Features />
-        <Testimonials />
-        <BlogSection />
+        {/* <VideoIntro /> */}
+        <VideoSeries />
+        {/* <Features /> */}
+        <LinkedInEmbed />
+        {/* <Testimonials /> */}
+        {/* <BlogSection /> */}
         <FAQ />
-        <CTA />
       </main>
       <Footer />
     </div>

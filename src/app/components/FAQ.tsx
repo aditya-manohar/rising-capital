@@ -1,160 +1,264 @@
+// components/FAQ.tsx - Professional Theme-Aware FAQ
 'use client'
-import { useState, useRef } from 'react'
-import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'framer-motion'
-import { ChevronDown, Download } from 'lucide-react'
+import { useState } from 'react'
+import { useTheme } from '../context/ThemeContext'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Download, FileText, Shield, TrendingUp, Globe, BarChart } from 'lucide-react'
 
 const FAQ = () => {
+    const { theme } = useTheme()
     const [activeIndex, setActiveIndex] = useState<number | null>(null)
-    const sectionRef = useRef(null)
-    const isInView = useInView(sectionRef, { margin: '-20%', once: true })
-    const { scrollYProgress } = useScroll({
-        target: sectionRef,
-        offset: ['start end', 'end start'],
-    })
+
+    // Theme-based styles
+    const styles = {
+        light: {
+            background: 'bg-white',
+            backgroundSecondary: 'bg-gray-50',
+            textPrimary: 'text-gray-900',
+            textSecondary: 'text-gray-600',
+            textTertiary: 'text-gray-500',
+            border: 'border-gray-200',
+            borderLight: 'border-gray-100',
+            accent: 'text-gray-900',
+            accentBorder: 'border-gray-900',
+            hoverBackground: 'hover:bg-gray-50',
+            cardBackground: 'bg-white',
+            buttonBackground: 'bg-gray-900',
+            buttonText: 'text-white'
+        },
+        dark: {
+            background: 'bg-gray-900',
+            backgroundSecondary: 'bg-gray-800',
+            textPrimary: 'text-white',
+            textSecondary: 'text-gray-300',
+            textTertiary: 'text-gray-400',
+            border: 'border-gray-700',
+            borderLight: 'border-gray-800',
+            accent: 'text-white',
+            accentBorder: 'border-white',
+            hoverBackground: 'hover:bg-gray-800',
+            cardBackground: 'bg-gray-800',
+            buttonBackground: 'bg-white',
+            buttonText: 'text-gray-900'
+        }
+    }
+
+    const currentStyle = styles[theme]
 
     const faqs = [
         {
+            icon: TrendingUp,
             question: 'What drives your investment strategy?',
-            answer: 'Our AI-powered, data-driven approach combines predictive analytics with deep market expertise to maximize returns.',
+            answer: 'Our strategy combines AI-powered predictive analytics with deep market expertise to identify high-potential opportunities. We focus on value-add properties in emerging luxury markets, leveraging data-driven insights to maximize returns while minimizing risk.',
         },
         {
+            icon: Shield,
             question: 'How do you secure my investments?',
-            answer: 'We employ quantum-grade encryption, biometric authentication, and continuous audits, backed by a $50M cybersecurity policy.',
+            answer: 'We implement institutional-grade security measures including multi-factor authentication, encrypted communications, and regular third-party audits. All investments are held in segregated accounts with top-tier custodians, and we maintain comprehensive insurance coverage.',
         },
         {
+            icon: BarChart,
             question: 'What reporting tools do you offer?',
-            answer: 'Real-time analytics, monthly performance reports, quarterly insights, and a 24/7 investor portal.',
+            answer: 'Investors receive quarterly performance reports, monthly updates, and 24/7 access to our secure portal with real-time analytics. We provide detailed breakdowns of returns, expenses, and market performance, plus annual tax documentation.',
         },
         {
+            icon: Globe,
             question: 'Can I invest globally?',
-            answer: 'Yes, access premium real estate opportunities across 50+ global markets with tailored strategies.',
+            answer: 'Yes. We offer access to premium real estate opportunities across North America, Europe, and select Asian markets. Our local partnerships and on-ground expertise ensure we navigate international regulations and market nuances effectively.',
         },
         {
+            icon: FileText,
             question: 'What are your fee structures?',
-            answer: 'Transparent, competitive fees detailed in our comprehensive investment memorandum.',
+            answer: 'Our fee structure is transparent and performance-aligned. We charge a management fee based on assets under management and a performance fee tied to achieving benchmark returns. Full details are provided in our investment memorandum.',
         },
     ]
-
-    const faqOpacity = useTransform(scrollYProgress, [0, 0.5], [0.5, 1])
-    const faqY = useTransform(scrollYProgress, [0, 0.5], [50, 0])
 
     const toggleFAQ = (index: number) => {
         setActiveIndex(activeIndex === index ? null : index)
     }
 
     return (
-        <section ref={sectionRef} className="relative py-20 overflow-hidden" style={{
-            backgroundColor: 'var(--background)'
-        }}>
-            <motion.div
-                className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-gray-900 z-0"
-                style={{ opacity: useTransform(scrollYProgress, [0, 1], [0.5, 0.2]) }}
-            >
-                <svg className="absolute inset-0 w-full h-full opacity-10" fill="none">
-                    <motion.circle
-                        cx="50%"
-                        cy="50%"
-                        r="200"
-                        stroke="url(#grad)"
-                        strokeWidth="2"
-                        animate={{ r: [200, 220, 200] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                    />
-                    <defs>
-                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style={{ stopColor: '#06b6d4', stopOpacity: 1 }} />
-                            <stop offset="100%" style={{ stopColor: '#a855f7', stopOpacity: 1 }} />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </motion.div>
+        <section
+            id="faq"
+            className={`relative py-24 transition-colors duration-300 ${currentStyle.background}`}
+        >
+            {/* Subtle background pattern */}
+            <div className={`absolute inset-0 opacity-[0.03] ${theme === 'light'
+                ? 'bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)]'
+                : 'bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)]'
+                } bg-[size:24px_24px]`} />
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
+                {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
                 >
-                    <h2 className="text-3xl sm:text-4xl font-bold" style={{ color: 'var(--foreground)' }}>
-                        Clarity for <span className="text-cyan-400">Investors</span>
+                    <div className="inline-flex items-center gap-3 mb-6">
+                        <div className={`w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
+                        <span className={`text-sm font-medium tracking-wider uppercase ${currentStyle.textTertiary}`}>
+                            FAQ
+                        </span>
+                        <div className={`w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
+                    </div>
+
+                    <h2 className={`text-4xl md:text-5xl font-light mb-6 tracking-tight ${currentStyle.textPrimary}`}>
+                        Common Questions
                     </h2>
-                    <p className="text-base sm:text-lg" style={{ color: 'var(--foreground)' }}>
-                        Answers to empower your investment journey
+
+                    <p className={`text-lg max-w-2xl mx-auto ${currentStyle.textSecondary}`}>
+                        Clear answers to help you understand our investment approach and processes
                     </p>
                 </motion.div>
 
-                <div className="max-w-4xl mx-auto mb-12 space-y-4">
+                {/* FAQ Items */}
+                <div className="space-y-4 mb-16">
                     {faqs.map((faq, index) => (
                         <motion.div
                             key={index}
-                            style={{ opacity: faqOpacity, y: faqY }}
-                            className="overflow-hidden"
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            viewport={{ once: true }}
+                            className={`rounded-xl border ${currentStyle.border} overflow-hidden transition-all duration-300 ${activeIndex === index
+                                ? `${currentStyle.backgroundSecondary} ${theme === 'light' ? 'shadow-sm' : 'shadow-md'}`
+                                : ''
+                                }`}
                         >
-                            <div
-                                className={`border rounded-2xl overflow-hidden ${activeIndex === index ? 'border-cyan-400/50 shadow-xl' : 'border-gray-700/50'}`}
+                            <button
+                                onClick={() => toggleFAQ(index)}
+                                className={`w-full flex items-center justify-between p-6 text-left transition-colors duration-300 ${activeIndex === index ? currentStyle.textPrimary : currentStyle.textSecondary
+                                    } ${currentStyle.hoverBackground}`}
+                                aria-expanded={activeIndex === index}
                             >
-                                <button
-                                    onClick={() => toggleFAQ(index)}
-                                    className="w-full flex justify-between items-center p-6 text-left hover:bg-gray-800/30 transition-colors"
-                                    aria-expanded={activeIndex === index}
-                                >
-                                    <h2 className={`text-lg sm:text-xl font-semibold ${activeIndex === index ? 'text-accent' : ''}`} style={{ color: 'var(--foreground)' }}>
-                                        {faq.question}
-                                    </h2>
-                                    <motion.div
-                                        animate={{ rotate: activeIndex === index ? 180 : 0 }}
-                                        className={`ml-4 flex-shrink-0 ${activeIndex === index ? 'text-cyan-400' : 'text-gray-300'}`}
-                                    >
-                                        <ChevronDown className="w-6 h-6" />
-                                    </motion.div>
-                                </button>
+                                <div className="flex items-start gap-4">
+                                    <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-700'
+                                        }`}>
+                                        <faq.icon className={`w-5 h-5 ${activeIndex === index
+                                            ? (theme === 'light' ? 'text-gray-900' : 'text-white')
+                                            : (theme === 'light' ? 'text-gray-600' : 'text-gray-400')
+                                            }`} />
+                                    </div>
+                                    <div className="text-left">
+                                        <h3 className={`font-medium text-lg mb-1 ${activeIndex === index ? currentStyle.textPrimary : currentStyle.textSecondary
+                                            }`}>
+                                            {faq.question}
+                                        </h3>
+                                    </div>
+                                </div>
 
-                                <AnimatePresence>
-                                    {activeIndex === index && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{
-                                                height: 'auto',
-                                                opacity: 1,
-                                                transition: { height: { duration: 0.4, ease: 'easeOut' }, opacity: { duration: 0.3 } },
-                                            }}
-                                            exit={{ height: 0, opacity: 0, transition: { height: { duration: 0.3 }, opacity: { duration: 0.2 } } }}
-                                            className="overflow-hidden"
-                                        >
-                                            <div className="px-6 pb-6 pt-2 text-gray-300 text-base sm:text-lg">{faq.answer}</div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+                                <motion.div
+                                    animate={{ rotate: activeIndex === index ? 180 : 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className={`ml-4 flex-shrink-0 ${activeIndex === index
+                                        ? (theme === 'light' ? 'text-gray-900' : 'text-white')
+                                        : currentStyle.textTertiary
+                                        }`}
+                                >
+                                    <ChevronDown className="w-5 h-5" />
+                                </motion.div>
+                            </button>
+
+                            <AnimatePresence>
+                                {activeIndex === index && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{
+                                            height: 'auto',
+                                            opacity: 1,
+                                            transition: {
+                                                height: { duration: 0.3, ease: 'easeOut' },
+                                                opacity: { duration: 0.2, delay: 0.1 }
+                                            }
+                                        }}
+                                        exit={{
+                                            height: 0,
+                                            opacity: 0,
+                                            transition: {
+                                                height: { duration: 0.2 },
+                                                opacity: { duration: 0.1 }
+                                            }
+                                        }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className={`px-6 pb-6 pt-2 ${currentStyle.textSecondary} leading-relaxed`}>
+                                            {faq.answer}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </motion.div>
                     ))}
                 </div>
 
+                {/* CTA Section */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="max-w-3xl mx-auto bg-card-bg backdrop-blur-lg rounded-2xl p-8 border border-cyan-400/30 shadow-xl"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    viewport={{ once: true }}
+                    className={`rounded-2xl border ${currentStyle.border} p-8 transition-colors duration-300 ${theme === 'light'
+                        ? 'bg-gradient-to-br from-gray-50 to-white'
+                        : 'bg-gradient-to-br from-gray-800 to-gray-900'
+                        }`}
                 >
-                    <div className="flex flex-col md:flex-row items-center gap-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="flex-1">
-                            <h3 className="text-lg sm:text-xl font-bold text-white mb-2" style={{ color: 'var(--foreground)' }}>Investment Blueprint</h3>
-                            <p className="text-gray-300 text-base sm:text-lg" style={{ color: 'var(--foreground)' }}>
-                                Dive into our strategy and performance metrics with our detailed memorandum.
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`p-2 rounded-lg ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-700'
+                                    }`}>
+                                    <FileText className={`w-5 h-5 ${theme === 'light' ? 'text-gray-900' : 'text-white'
+                                        }`} />
+                                </div>
+                                <h3 className={`text-xl font-medium ${currentStyle.textPrimary}`}>
+                                    Investment Memorandum
+                                </h3>
+                            </div>
+
+                            <p className={`${currentStyle.textSecondary} mb-6 md:mb-0`}>
+                                Download our comprehensive guide detailing investment strategies,
+                                performance metrics, and partnership opportunities.
                             </p>
                         </div>
+
                         <motion.button
-                            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(6, 182, 212, 0.5)' }}
-                            whileTap={{ scale: 0.95 }}
-                            className="flex items-center px-6 py-3 bg-gradient-to-r from-cyan-400 to-blue-600 text-white rounded-full font-medium text-base sm:text-lg"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`px-6 py-3 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-3 ${theme === 'light'
+                                ? 'bg-gray-900 text-white hover:bg-gray-800'
+                                : 'bg-white text-gray-900 hover:bg-gray-100'
+                                }`}
                         >
-                            <Download className="w-5 h-5 mr-2" />
-                            Download Now
+                            <Download className="w-4 h-4" />
+                            Download PDF
                         </motion.button>
                     </div>
                 </motion.div>
-            </ div>
+
+                {/* Additional Information */}
+                <div className="mt-12 text-center">
+                    <p className={`text-sm ${currentStyle.textTertiary} mb-4`}>
+                        Still have questions?
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <button className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 ${theme === 'light'
+                            ? 'border border-gray-900 text-gray-900 hover:bg-gray-50'
+                            : 'border border-white text-white hover:bg-white/10'
+                            }`}>
+                            Contact Investor Relations
+                        </button>
+                        <button className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 ${theme === 'light'
+                            ? 'text-gray-600 hover:text-gray-900'
+                            : 'text-gray-400 hover:text-white'
+                            }`}>
+                            Schedule Consultation
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
     )
 }

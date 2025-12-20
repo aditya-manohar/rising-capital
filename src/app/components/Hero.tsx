@@ -1,138 +1,251 @@
+// components/Hero.tsx - Fixed Responsive Professional Hero
 'use client'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
+// import { useTheme } from '../context/ThemeContext'
 import { motion, useScroll, useTransform } from 'framer-motion'
-// import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, ChevronDown } from 'lucide-react'
 
 const Hero = () => {
-    const ref = useRef(null)
+    // const { theme } = useTheme()
+    // const [isPlaying, setIsPlaying] = useState(true)
+    const [isMuted,] = useState(false)
+    const [mounted, setMounted] = useState(false)
+    const videoRef = useRef<HTMLVideoElement>(null)
+    const containerRef = useRef(null)
+
     const { scrollYProgress } = useScroll({
-        target: ref,
+        target: containerRef,
         offset: ['start start', 'end start'],
     })
 
+    // Theme-based styles
+    // const styles = {
+    //     light: {
+    //         textPrimary: 'text-white',
+    //         textSecondary: 'text-gray-200',
+    //         buttonPrimary: 'bg-white text-gray-900 hover:bg-gray-100',
+    //         buttonSecondary: 'border border-white text-white hover:bg-white/10',
+    //     },
+    //     dark: {
+    //         textPrimary: 'text-white',
+    //         textSecondary: 'text-gray-200',
+    //         buttonPrimary: 'bg-white text-gray-900 hover:bg-gray-100',
+    //         buttonSecondary: 'border border-white text-white hover:bg-white/10',
+    //     }
+    // }
+
+    // const currentStyle = styles[theme]
+
     // Scroll-based animations
-    const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.4])
-    const videoScale = useTransform(scrollYProgress, [0, 1], [1, 1.1])
-    const textY = useTransform(scrollYProgress, [0, 0.6], [0, -100])
+    // const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.4])
+    const textY = useTransform(scrollYProgress, [0, 0.6], [0, -50])
     const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-    // const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15])
-    // const imageOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.5])
-    const ctaY = useTransform(scrollYProgress, [0, 0.6], [0, 50])
+
+    useEffect(() => {
+        setMounted(true)
+        if (videoRef.current) {
+            videoRef.current.play()
+        }
+    }, [])
+
+    const stats = [
+        { value: '18-25%', label: 'Average Annual Returns' },
+        { value: '$250M+', label: 'Assets Under Management' },
+        { value: '50+', label: 'Global Markets' }
+    ]
+
+    if (!mounted) {
+        return null
+    }
 
     return (
-        <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-900">
+        <section ref={containerRef} className="relative min-h-screen w-full overflow-hidden bg-black">
             {/* Video Background */}
-            <motion.video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 w-full h-full object-cover z-0"
-                style={{ opacity: videoOpacity, scale: videoScale }}
-            >
-                <source src="/assets/hero-bg.mp4" type="video/mp4" />
-            </motion.video>
-            {/* Overlay for contrast */}
-            <motion.div
-                className="absolute inset-0 z-10"
-                style={{
-                    opacity: videoOpacity,
-                    background: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, rgba(59, 130, 246, 0.2) 50%, rgba(0, 0, 0, 0.5) 100%)'
-                }}
-            />
+            <div className="absolute inset-0 z-0">
+                <video
+                    ref={videoRef}
+                    autoPlay
+                    loop
+                    muted={isMuted}
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ opacity: 1 }}
+                >
+                    <source src="/assets/hero-video.mp4" type="video/mp4" />
+                    {/* Fallback image */}
+                    <Image
+                        src="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070"
+                        alt="Luxury Real Estate Background"
+                        fill
+                        className="object-cover"
+                        priority
+                    />
+                </video>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 max-w-7xl">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 py-16 lg:py-24">
+                {/* Overlay for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
+            </div>
+
+            {/* <div className="absolute right-4 sm:right-6 bottom-4 sm:bottom-6 z-20 flex items-center gap-2 sm:gap-3">
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={toggleMute}
+                    className="p-2 sm:p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 text-white hover:bg-black/70 transition-colors"
+                >
+                    {isMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
+                </motion.button>
+
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={togglePlay}
+                    className="p-2 sm:p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 text-white hover:bg-black/70 transition-colors"
+                >
+                    {isPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5" />}
+                </motion.button>
+            </div> */}
+
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div className="flex flex-col items-center justify-center min-h-screen py-12 lg:py-20 px-4 sm:px-0">
                     {/* Text Content */}
                     <motion.div
-                        className="lg:w-1/2 text-center lg:text-left space-y-6"
+                        className="text-center space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-4xl lg:max-w-6xl mx-auto"
                         style={{ y: textY, opacity: textOpacity }}
                     >
-                        <motion.h1
-                            initial={{ opacity: 0, x: -80 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
-                            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight"
-                        >
-                            <span className="relative inline-block">
-                                Elevate Your Wealth
-                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse"></span>
-                            </span>
-                            <br />
-                            with <span className="text-blue-600">Rising Capital</span>
-                        </motion.h1>
-                        <motion.p
-                            initial={{ opacity: 0, x: -80 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-                            className="text-base sm:text-lg text-gray-100 max-w-md mx-auto lg:mx-0"
-                        >
-                            Invest in global luxury properties with AI-driven insights and expert guidance.
-                        </motion.p>
+                        {/* Badge */}
                         <motion.div
-                            initial={{ opacity: 0, y: 40 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1, delay: 0.7, ease: 'easeOut' }}
-                            style={{ y: ctaY }}
+                            transition={{ duration: 0.6 }}
+                            className="inline-flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 lg:mb-8"
+                        >
+                            <div className="w-8 sm:w-12 h-px bg-white/50" />
+                            <span className="text-xs sm:text-sm font-medium tracking-widest text-white/80 uppercase px-2">
+                                Premium Investment Platform
+                            </span>
+                            <div className="w-8 sm:w-12 h-px bg-white/50" />
+                        </motion.div>
+
+                        {/* Main Heading */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                        >
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight text-white mb-4 sm:mb-6 leading-tight">
+                                <span className="block">Institutional-Grade</span>
+                                <span className="block mt-2 sm:mt-3 md:mt-4 font-normal">Real Estate</span>
+                                <span className="block mt-2 sm:mt-3 md:mt-4 font-light">Investment</span>
+                            </h1>
+                        </motion.div>
+
+                        {/* Description */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4 }}
+                            className="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light px-2"
+                        >
+                            Access curated luxury real estate opportunities with AI-driven insights
+                            and professional portfolio management for sophisticated investors.
+                        </motion.p>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.6 }}
+                            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-6 sm:pt-8"
                         >
                             <motion.button
-                                whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' }}
-                                whileTap={{ scale: 0.95 }}
-                                className="px-8 py-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium text-base sm:text-lg flex items-center justify-center mx-auto lg:mx-0 shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 min-w-[200px] sm:min-w-0"
                             >
-                                Start Investing <ArrowRight className="ml-2 h-5 w-5" />
+                                <span>Schedule Consultation</span>
+                                <ArrowRight className="w-4 h-4" />
+                            </motion.button>
+
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0"
+                            >
+                                View Investment Portfolio
                             </motion.button>
                         </motion.div>
                     </motion.div>
 
-                    {/* Featured Property Image */}
-                    {/* <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1.2, delay: 0.5, ease: 'easeOut' }}
-                        className="lg:w-1/2 flex justify-center"
-                        style={{ scale: imageScale, opacity: imageOpacity }}
+                    {/* Stats Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                        className="mt-8 sm:mt-12 lg:mt-16 w-full max-w-2xl lg:max-w-4xl"
                     >
-                        <div className="relative w-full max-w-[500px] sm:max-w-[600px] h-[300px] sm:h-[400px] rounded-2xl overflow-hidden shadow-xl border border-blue-500/20">
-                            <Image
-                                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
-                                alt="Featured Property"
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                            <motion.div
-                                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 sm:p-6"
-                                initial={{ y: 80 }}
-                                animate={{ y: 0 }}
-                                transition={{ duration: 1, delay: 0.7 }}
-                            >
-                                <h3 className="text-white text-lg sm:text-xl font-semibold">Dubai Oceanfront Villa</h3>
-                                <p className="text-gray-300 text-sm">$28M Investment, 7.8% Annual ROI</p>
-                            </motion.div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-0">
+                            {stats.map((stat, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
+                                    className="text-center p-4 sm:p-0"
+                                >
+                                    <div className="text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-1 sm:mb-2">
+                                        {stat.value}
+                                    </div>
+                                    <div className="text-xs sm:text-sm text-gray-300 tracking-wide leading-tight">
+                                        {stat.label}
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
-                    </motion.div> */}
+                    </motion.div>
                 </div>
             </div>
 
-            {/* Floating Decorative Elements */}
+            {/* Scroll Indicator */}
             <motion.div
-                className="absolute top-8 right-8 w-20 h-20 bg-blue-500/20 rounded-full filter blur-xl z-10"
-                animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.4, 0.7, 0.4],
-                    transition: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
-                }}
-            />
-            <motion.div
-                className="absolute bottom-8 left-8 w-16 h-16 bg-purple-500/20 rounded-full filter blur-xl z-10"
-                animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.3, 0.6, 0.3],
-                    transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
-                }}
-            />
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 1.2 }}
+                className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+            >
+                <div className="flex flex-col items-center">
+                    <span className="text-xs font-medium tracking-wider mb-2 sm:mb-4 text-white/70">
+                        Scroll to explore
+                    </span>
+                    <motion.div
+                        animate={{ y: [0, 6, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                        <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-white/70" />
+                    </motion.div>
+                </div>
+            </motion.div>
+
+            {/* Floating Elements - Only on larger screens */}
+            <div className="hidden lg:block">
+                <motion.div
+                    className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-2xl pointer-events-none"
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.5, 0.3],
+                        transition: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+                    }}
+                />
+                <motion.div
+                    className="absolute bottom-1/4 left-1/4 w-24 h-24 bg-gradient-to-tr from-cyan-500/10 to-blue-500/10 rounded-full blur-2xl pointer-events-none"
+                    animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                        transition: { duration: 5, repeat: Infinity, ease: 'easeInOut' },
+                    }}
+                />
+            </div>
         </section>
     )
 }
