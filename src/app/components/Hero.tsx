@@ -1,51 +1,18 @@
-// components/Hero.tsx - Fixed Responsive Professional Hero
+// components/Hero.tsx - Fixed with hydration error resolved
 'use client'
 import { useRef, useState, useEffect } from 'react'
-// import { useTheme } from '../context/ThemeContext'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 
 const Hero = () => {
-    // const { theme } = useTheme()
-    // const [isPlaying, setIsPlaying] = useState(true)
-    const [isMuted,] = useState(false)
+    const [isMuted] = useState(false)
     const [mounted, setMounted] = useState(false)
     const videoRef = useRef<HTMLVideoElement>(null)
-    const containerRef = useRef(null)
-
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ['start start', 'end start'],
-    })
-
-    // Theme-based styles
-    // const styles = {
-    //     light: {
-    //         textPrimary: 'text-white',
-    //         textSecondary: 'text-gray-200',
-    //         buttonPrimary: 'bg-white text-gray-900 hover:bg-gray-100',
-    //         buttonSecondary: 'border border-white text-white hover:bg-white/10',
-    //     },
-    //     dark: {
-    //         textPrimary: 'text-white',
-    //         textSecondary: 'text-gray-200',
-    //         buttonPrimary: 'bg-white text-gray-900 hover:bg-gray-100',
-    //         buttonSecondary: 'border border-white text-white hover:bg-white/10',
-    //     }
-    // }
-
-    // const currentStyle = styles[theme]
-
-    // Scroll-based animations
-    // const videoOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.4])
-    const textY = useTransform(scrollYProgress, [0, 0.6], [0, -50])
-    const textOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
 
     useEffect(() => {
         setMounted(true)
         if (videoRef.current) {
-            videoRef.current.play()
+            videoRef.current.play().catch(e => console.log('Video autoplay failed:', e))
         }
     }, [])
 
@@ -55,12 +22,72 @@ const Hero = () => {
         { value: '50+', label: 'Global Markets' }
     ]
 
+    // Return simple static version during SSR
     if (!mounted) {
-        return null
+        return (
+            <section className="relative min-h-screen w-full overflow-hidden bg-black">
+                {/* Static background for SSR */}
+                <div className="absolute inset-0 z-0 bg-black">
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
+                </div>
+
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                    <div className="flex flex-col items-center justify-center min-h-screen py-12 lg:py-20 px-4 sm:px-0">
+                        <div className="text-center space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-4xl lg:max-w-6xl mx-auto">
+                            <div className="inline-flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 lg:mb-8">
+                                <div className="w-8 sm:w-12 h-px bg-white/50" />
+                                <span className="text-xs sm:text-sm font-medium tracking-widest text-white/80 uppercase px-2">
+                                    Premium Investment Platform
+                                </span>
+                                <div className="w-8 sm:w-12 h-px bg-white/50" />
+                            </div>
+
+                            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight text-white mb-4 sm:mb-6 leading-tight">
+                                <span className="block">Institutional-Grade</span>
+                                <span className="block mt-2 sm:mt-3 md:mt-4 font-normal">Real Estate</span>
+                                <span className="block mt-2 sm:mt-3 md:mt-4 font-light">Investment</span>
+                            </h1>
+
+                            <p className="text-base sm:text-lg lg:text-xl text-gray-200 max-w-2xl lg:max-w-3xl mx-auto leading-relaxed font-light px-2">
+                                Access curated luxury real estate opportunities with AI-driven insights
+                                and professional portfolio management for sophisticated investors.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-6 sm:pt-8">
+                                <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 min-w-[200px] sm:min-w-0">
+                                    <span>Schedule Consultation</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+
+                                <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0">
+                                    View Investment Portfolio
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-8 sm:mt-12 lg:mt-16 w-full max-w-2xl lg:max-w-4xl">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-0">
+                                {stats.map((stat, index) => (
+                                    <div key={index} className="text-center p-4 sm:p-0">
+                                        <div className="text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-1 sm:mb-2">
+                                            {stat.value}
+                                        </div>
+                                        <div className="text-xs sm:text-sm text-gray-300 tracking-wide leading-tight">
+                                            {stat.label}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        )
     }
 
+    // Client-side only render with animations
     return (
-        <section ref={containerRef} className="relative min-h-screen w-full overflow-hidden bg-black">
+        <section className="relative min-h-screen w-full overflow-hidden bg-black">
             {/* Video Background */}
             <div className="absolute inset-0 z-0">
                 <video
@@ -70,16 +97,13 @@ const Hero = () => {
                     muted={isMuted}
                     playsInline
                     className="absolute inset-0 w-full h-full object-cover"
-                    style={{ opacity: 1 }}
                 >
                     <source src="/assets/hero-video.mp4" type="video/mp4" />
                     {/* Fallback image */}
-                    <Image
+                    <img
                         src="https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070"
                         alt="Luxury Real Estate Background"
-                        fill
-                        className="object-cover"
-                        priority
+                        className="absolute inset-0 w-full h-full object-cover"
                     />
                 </video>
 
@@ -87,32 +111,14 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70" />
             </div>
 
-            {/* <div className="absolute right-4 sm:right-6 bottom-4 sm:bottom-6 z-20 flex items-center gap-2 sm:gap-3">
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={toggleMute}
-                    className="p-2 sm:p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 text-white hover:bg-black/70 transition-colors"
-                >
-                    {isMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
-                </motion.button>
-
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={togglePlay}
-                    className="p-2 sm:p-3 rounded-full bg-black/50 backdrop-blur-sm border border-white/20 text-white hover:bg-black/70 transition-colors"
-                >
-                    {isPlaying ? <Pause className="w-4 h-4 sm:w-5 sm:h-5" /> : <Play className="w-4 h-4 sm:w-5 sm:h-5" />}
-                </motion.button>
-            </div> */}
-
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
                 <div className="flex flex-col items-center justify-center min-h-screen py-12 lg:py-20 px-4 sm:px-0">
                     {/* Text Content */}
                     <motion.div
                         className="text-center space-y-4 sm:space-y-6 lg:space-y-8 w-full max-w-4xl lg:max-w-6xl mx-auto"
-                        style={{ y: textY, opacity: textOpacity }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
                     >
                         {/* Badge */}
                         <motion.div
