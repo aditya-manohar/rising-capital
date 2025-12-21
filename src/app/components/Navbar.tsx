@@ -1,4 +1,3 @@
-//Navbar.tsx
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -12,10 +11,9 @@ const Navbar = () => {
 
     return (
         <motion.header
-            className="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 text-gray-900 dark:text-white backdrop-blur-lg shadow-lg transition-colors duration-300"
+            className="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-lg transition-colors duration-300"
             style={{
                 backgroundColor: 'var(--background)',
-                // color: 'var(--foreground)'
             }}
             initial={{ y: -100 }}
             animate={{ y: 0 }}
@@ -67,8 +65,11 @@ const Navbar = () => {
                     </motion.button>
                     <ThemeToggle />
                 </div>
-
-                <button className="lg:hidden text-gray-900 dark:text-white" onClick={() => setIsOpen(!isOpen)}>
+                <button
+                    className="lg:hidden p-2 -mr-2 text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text dark:text-white hover:from-cyan-500 hover:to-blue-700 dark:hover:text-cyan-400 transition-all duration-300"
+                    onClick={() => setIsOpen(!isOpen)}
+                    aria-label="Toggle menu"
+                >
                     {isOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
@@ -78,30 +79,51 @@ const Navbar = () => {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="lg:hidden bg-white dark:bg-gray-900 backdrop-blur-lg px-4 py-6 transition-colors duration-300"
+                    className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg transition-colors duration-300 overflow-hidden"
+                    style={{
+                        backgroundColor: 'var(--background)',
+                        backdropFilter: 'blur(12px)',
+                    }}
                 >
-                    {navItems.map((item) => (
-                        <Link
-                            key={item}
-                            href={`#${item.toLowerCase()}`}
-                            className="block text-[color:var(--foreground)] hover:text-cyan-400 dark:hover:text-cyan-400 text-base font-medium py-2"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            {item}
-                        </Link>
-                    ))}
-                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <Link href="/login" className="block text-[color:var(--foreground)] hover:text-cyan-400 dark:hover:text-cyan-400 text-base font-medium py-2">
-                            Investor Portal
-                        </Link>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            className="mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 text-white font-medium text-base flex items-center"
-                        >
-                            Get Started <ArrowRight className="ml-2 h-5 w-5" />
-                        </motion.button>
-                        <div className="mt-4">
-                            <ThemeToggle />
+                    <div className="container mx-auto px-4 py-6">
+                        {/* Navigation Links */}
+                        <div className="space-y-1 mb-4">
+                            {navItems.map((item) => (
+                                <Link
+                                    key={item}
+                                    href={`#${item.toLowerCase()}`}
+                                    className="block text-[color:var(--foreground)] hover:text-cyan-400 dark:hover:text-cyan-400 text-base font-medium py-3 px-4 rounded-lg hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors duration-200"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {item}
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Separator */}
+                        <div className="border-t border-gray-200 dark:border-gray-700 my-4 pt-4">
+                            <Link
+                                href="/login"
+                                className="block text-[color:var(--foreground)] hover:text-cyan-400 dark:hover:text-cyan-400 text-base font-medium py-3 px-4 rounded-lg hover:bg-gray-100/50 dark:hover:bg-gray-800/50 transition-colors duration-200 mb-4"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                Investor Portal
+                            </Link>
+
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="flex-1 px-6 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-600 text-white font-medium text-base flex items-center justify-center shadow-md"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    Get Started <ArrowRight className="ml-2 h-5 w-5" />
+                                </motion.button>
+
+                                <div className="flex justify-center sm:justify-start">
+                                    <ThemeToggle />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </motion.div>

@@ -29,8 +29,8 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider>
           {children}
+          <AdminFloatingButton />
         </ThemeProvider>
-        <AdminFloatingButton />
       </body>
     </html>
   );

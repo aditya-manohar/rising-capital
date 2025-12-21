@@ -1,4 +1,4 @@
-// components/LinkedInCarousel.tsx - Updated with infinite scroll
+// components/LinkedInCarousel.tsx - Updated with mobile responsiveness
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTheme } from '../context/ThemeContext'
@@ -137,8 +137,9 @@ const LinkedInCarousel = () => {
         if (typeof window === 'undefined') return
 
         if (window.innerWidth < 640) setVisibleCards(1)
-        else if (window.innerWidth < 1024) setVisibleCards(2)
-        else setVisibleCards(3)
+        else if (window.innerWidth < 768) setVisibleCards(1) // Small tablets
+        else if (window.innerWidth < 1024) setVisibleCards(2) // Tablets
+        else setVisibleCards(3) // Desktop
     }
 
     const handleNext = useCallback(() => {
@@ -202,44 +203,44 @@ const LinkedInCarousel = () => {
     // Render LinkedIn post
     const renderLinkedInPost = (post: typeof linkedinPosts[0], index: number) => (
         <div key={`${post.id}-${index}`} className="h-full">
-            <div className={`rounded-xl border ${currentStyle.border} ${currentStyle.cardBackground} overflow-hidden shadow-lg h-full flex flex-col`}>
+            <div className={`rounded-xl border ${currentStyle.border} ${currentStyle.cardBackground} overflow-hidden shadow-lg h-full flex flex-col mx-auto max-w-md sm:max-w-none`}>
                 {/* Post Header */}
-                <div className={`p-6 ${currentStyle.linkedinBg}`}>
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className={`w-12 h-12 rounded-full border ${currentStyle.border} flex items-center justify-center ${theme === 'light' ? 'bg-white' : 'bg-gray-700'}`}>
-                                <Linkedin className={`w-6 h-6 ${currentStyle.linkedinColor}`} />
+                <div className={`p-4 sm:p-6 ${currentStyle.linkedinBg}`}>
+                    <div className="flex items-start justify-between mb-3 sm:mb-4">
+                        <div className="flex items-start gap-2 sm:gap-3">
+                            <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border ${currentStyle.border} flex items-center justify-center flex-shrink-0 ${theme === 'light' ? 'bg-white' : 'bg-gray-700'}`}>
+                                <Linkedin className={`w-5 h-5 sm:w-6 sm:h-6 ${currentStyle.linkedinColor}`} />
                             </div>
-                            <div>
-                                <h3 className={`font-semibold ${currentStyle.textPrimary}`}>Jinil Patel</h3>
-                                <p className={`text-xs ${currentStyle.textTertiary}`}>Founder & CEO • Rising Capital</p>
+                            <div className="min-w-0">
+                                <h3 className={`font-semibold text-sm sm:text-base truncate ${currentStyle.textPrimary}`}>Jinil Patel</h3>
+                                <p className={`text-xs ${currentStyle.textTertiary} line-clamp-1`}>Founder & CEO • Rising Capital</p>
                                 <p className={`text-xs ${currentStyle.textTertiary} mt-1`}>{post.date}</p>
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className={`text-xs ${currentStyle.textTertiary}`}>Featured Post</div>
+                        <div className="text-right flex-shrink-0 ml-2">
+                            <div className={`text-xs ${currentStyle.textTertiary}`}>Featured</div>
                             <div className="text-sm font-semibold">#{(index % realPostsCount) + 1}</div>
                         </div>
                     </div>
 
-                    <h4 className={`text-xl font-bold mb-3 ${currentStyle.textPrimary}`}>
+                    <h4 className={`text-lg sm:text-xl font-bold mb-2 sm:mb-3 line-clamp-2 ${currentStyle.textPrimary}`}>
                         {post.title}
                     </h4>
 
-                    <p className={`text-sm mb-4 ${currentStyle.textSecondary}`}>
+                    <p className={`text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-3 ${currentStyle.textSecondary}`}>
                         {post.content}
                     </p>
                 </div>
 
                 {/* Content Section */}
-                <div className="flex-1 p-6">
-                    <div className="mb-6">
-                        <h5 className={`font-semibold mb-3 ${currentStyle.textPrimary}`}>Key Insights:</h5>
-                        <ul className="space-y-2">
+                <div className="flex-1 p-4 sm:p-6">
+                    <div className="mb-4 sm:mb-6">
+                        <h5 className={`font-semibold text-sm sm:text-base mb-2 sm:mb-3 ${currentStyle.textPrimary}`}>Key Insights:</h5>
+                        <ul className="space-y-1 sm:space-y-2">
                             {post.insights.map((insight: string, idx: number) => (
                                 <li key={idx} className="flex items-start gap-2">
-                                    <div className={`w-1.5 h-1.5 rounded-full mt-2 ${currentStyle.linkedinColor}`} />
-                                    <span className={`text-sm ${currentStyle.textSecondary}`}>{insight}</span>
+                                    <div className={`w-1.5 h-1.5 rounded-full mt-1.5 sm:mt-2 flex-shrink-0 ${currentStyle.linkedinColor}`} />
+                                    <span className={`text-xs sm:text-sm line-clamp-2 ${currentStyle.textSecondary}`}>{insight}</span>
                                 </li>
                             ))}
                         </ul>
@@ -247,19 +248,19 @@ const LinkedInCarousel = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="p-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700">
                     <button
                         onClick={() => window.open(post.actualUrl, '_blank')}
-                        className={`w-full py-3 rounded-lg text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 ${currentStyle.buttonPrimary} mb-3`}
+                        className={`w-full py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-2 ${currentStyle.buttonPrimary} mb-2 sm:mb-3`}
                     >
-                        <Linkedin className="w-4 h-4" />
-                        View Full Post on LinkedIn
+                        <Linkedin className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        View Full Post
                     </button>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 sm:gap-3">
                         <button
                             onClick={() => handleShare(post.actualUrl)}
-                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${theme === 'light'
+                            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 border ${theme === 'light'
                                 ? 'border-gray-300 text-gray-700 hover:bg-gray-50'
                                 : 'border-gray-600 text-gray-300 hover:bg-gray-700/30'
                                 }`}
@@ -268,7 +269,7 @@ const LinkedInCarousel = () => {
                         </button>
                         <button
                             onClick={() => window.open('https://www.linkedin.com/in/jinil-patel-5b13451a8', '_blank')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all duration-300 border ${theme === 'light'
+                            className={`flex-1 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 border ${theme === 'light'
                                 ? 'border-[#0A66C2] text-[#0A66C2] hover:bg-[#0A66C2]/10'
                                 : 'border-[#70B5F9] text-[#70B5F9] hover:bg-[#70B5F9]/10'
                                 }`}
@@ -282,7 +283,7 @@ const LinkedInCarousel = () => {
     )
 
     return (
-        <section className={`relative py-24 transition-colors duration-300 ${currentStyle.background}`}>
+        <section className={`relative py-12 sm:py-16 md:py-20 lg:py-24 transition-colors duration-300 ${currentStyle.background}`}>
             <div className="absolute inset-0">
                 <div className={`absolute inset-0 opacity-[0.02] ${theme === 'light'
                     ? 'bg-[linear-gradient(90deg,#e5e7eb_1px,transparent_1px),linear-gradient(180deg,#e5e7eb_1px,transparent_1px)]'
@@ -290,52 +291,52 @@ const LinkedInCarousel = () => {
                     } bg-[size:40px_40px]`} />
             </div>
 
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
+            <div className="relative z-10 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
                 {/* Section Header */}
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-3 mb-6">
-                        <div className={`w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
-                        <Linkedin className={`w-6 h-6 ${currentStyle.linkedinColor}`} />
-                        <span className={`text-sm font-medium tracking-widest uppercase ${currentStyle.textTertiary}`}>
+                <div className="text-center mb-8 sm:mb-12 md:mb-16">
+                    <div className="inline-flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                        <div className={`w-8 sm:w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
+                        <Linkedin className={`w-5 h-5 sm:w-6 sm:h-6 ${currentStyle.linkedinColor}`} />
+                        <span className={`text-xs sm:text-sm font-medium tracking-widest uppercase ${currentStyle.textTertiary}`}>
                             LinkedIn Insights
                         </span>
-                        <div className={`w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
+                        <div className={`w-8 sm:w-12 h-px ${theme === 'light' ? 'bg-gray-900' : 'bg-white'}`} />
                     </div>
 
-                    <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light tracking-tight mb-6 ${currentStyle.textPrimary}`}>
+                    <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light tracking-tight mb-4 sm:mb-6 ${currentStyle.textPrimary} px-2`}>
                         Business Fundamentals
-                        <span className="block mt-3 font-normal">Across Industries</span>
+                        <span className="block mt-2 sm:mt-3 font-normal">Across Industries</span>
                     </h2>
 
-                    <p className={`text-lg max-w-3xl mx-auto leading-relaxed ${currentStyle.textSecondary}`}>
+                    <p className={`text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed ${currentStyle.textSecondary} px-4 sm:px-6 md:px-8`}>
                         How operational excellence in a pizza shop translates directly to
                         successful multifamily real estate management.
                     </p>
                 </div>
 
                 {/* Infinite Carousel */}
-                <div className="relative" ref={containerRef}>
-                    {/* Navigation Arrows */}
+                <div className="relative mx-auto max-w-6xl" ref={containerRef}>
+                    {/* Navigation Arrows - Show only on tablets and up */}
                     <button
                         onClick={handlePrev}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-8 z-20 p-3 lg:p-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+                        className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 md:-translate-x-4 lg:-translate-x-6 z-20 p-2.5 md:p-3 lg:p-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
                         aria-label="Previous post"
                     >
-                        <ChevronLeft className="w-5 h-5 lg:w-6 lg:h-6 text-gray-700 dark:text-gray-300" />
+                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-gray-700 dark:text-gray-300" />
                     </button>
 
                     <button
                         onClick={handleNext}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-8 z-20 p-3 lg:p-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+                        className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 md:translate-x-4 lg:translate-x-6 z-20 p-2.5 md:p-3 lg:p-4 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
                         aria-label="Next post"
                     >
-                        <ChevronRight className="w-5 h-5 lg:w-6 lg:h-6 text-gray-700 dark:text-gray-300" />
+                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 text-gray-700 dark:text-gray-300" />
                     </button>
 
                     {/* Carousel Container */}
-                    <div className="overflow-hidden px-2 lg:px-0">
+                    <div className="overflow-hidden px-2 sm:px-4 lg:px-0">
                         <div
-                            className="flex transition-transform duration-500 ease-in-out gap-6"
+                            className="flex transition-transform duration-500 ease-in-out gap-4 sm:gap-6"
                             style={{
                                 transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`
                             }}
@@ -346,7 +347,7 @@ const LinkedInCarousel = () => {
                                     className="flex-shrink-0 transition-transform duration-300"
                                     style={{ width: `${100 / visibleCards}%` }}
                                 >
-                                    <div className="h-full px-2">
+                                    <div className={`h-full ${visibleCards === 1 ? 'px-2 sm:px-4' : 'px-1 sm:px-2 md:px-3'}`}>
                                         {renderLinkedInPost(post, index)}
                                     </div>
                                 </div>
@@ -354,8 +355,44 @@ const LinkedInCarousel = () => {
                         </div>
                     </div>
 
-                    {/* Progress Indicators */}
-                    <div className="flex justify-center mt-8 gap-2">
+                    {/* Mobile Navigation Buttons */}
+                    <div className="flex justify-center items-center gap-4 mt-6 sm:hidden">
+                        <button
+                            onClick={handlePrev}
+                            className="p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow hover:shadow-md transition-all"
+                            aria-label="Previous post"
+                        >
+                            <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                        </button>
+
+                        {/* Progress Indicators */}
+                        <div className="flex gap-2">
+                            {Array.from({ length: realPostsCount }).map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentIndex(idx)}
+                                    className="focus:outline-none"
+                                    aria-label={`Go to position ${idx + 1}`}
+                                >
+                                    <div className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex % realPostsCount
+                                        ? `w-6 ${theme === 'light' ? 'bg-[#0A66C2]' : 'bg-[#70B5F9]'}`
+                                        : `w-2 ${theme === 'light' ? 'bg-gray-300' : 'bg-gray-600'}`
+                                        }`} />
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={handleNext}
+                            className="p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow hover:shadow-md transition-all"
+                            aria-label="Next post"
+                        >
+                            <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                        </button>
+                    </div>
+
+                    {/* Desktop Progress Indicators */}
+                    <div className="hidden sm:flex justify-center mt-6 md:mt-8 gap-2">
                         {Array.from({ length: realPostsCount }).map((_, idx) => (
                             <button
                                 key={idx}
@@ -371,12 +408,18 @@ const LinkedInCarousel = () => {
                         ))}
                     </div>
                 </div>
+
+                {/* Mobile call to action */}
+                <div className="mt-8 sm:hidden text-center">
+                    <p className={`text-sm ${currentStyle.textSecondary} mb-4`}>
+                        Swipe or use buttons to navigate posts
+                    </p>
+                </div>
             </div>
         </section>
     )
 }
 
-// Add global type for LinkedIn script loading
 declare global {
     interface Window {
         linkedInLoaded?: boolean

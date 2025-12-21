@@ -1,8 +1,9 @@
-// components/ConsultationModal.tsx
+// components/ConsultationModal.tsx - Updated with theme support
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Calendar, Mail, User, Phone, CheckCircle } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext' // Add this import
 
 interface ConsultationModalProps {
     isOpen: boolean
@@ -18,6 +19,7 @@ interface FormData {
 }
 
 const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
+    const { theme } = useTheme() // Add this hook
     const [formData, setFormData] = useState<FormData>({
         name: '',
         email: '',
@@ -27,6 +29,48 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
+
+    // Theme-based styles
+    const modalStyles = {
+        light: {
+            background: 'bg-gradient-to-br from-white to-gray-50',
+            border: 'border-gray-200',
+            textPrimary: 'text-gray-900',
+            textSecondary: 'text-gray-600',
+            textTertiary: 'text-gray-500',
+            inputBackground: 'bg-gray-100',
+            inputBorder: 'border-gray-300',
+            inputText: 'text-gray-900',
+            placeholder: 'placeholder-gray-500',
+            successBackground: 'bg-green-500/20',
+            successText: 'text-green-600',
+            accent: 'text-blue-600',
+            accentBorder: 'border-blue-600',
+            buttonBackground: 'bg-gradient-to-r from-blue-600 to-cyan-500',
+            buttonHover: 'hover:from-blue-700 hover:to-cyan-600',
+            closeButton: 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+        },
+        dark: {
+            background: 'bg-gradient-to-br from-gray-900 to-gray-950',
+            border: 'border-gray-800',
+            textPrimary: 'text-white',
+            textSecondary: 'text-gray-300',
+            textTertiary: 'text-gray-400',
+            inputBackground: 'bg-gray-800/50',
+            inputBorder: 'border-gray-700',
+            inputText: 'text-white',
+            placeholder: 'placeholder-gray-500',
+            successBackground: 'bg-green-500/20',
+            successText: 'text-green-400',
+            accent: 'text-blue-400',
+            accentBorder: 'border-blue-400',
+            buttonBackground: 'bg-gradient-to-r from-blue-600 to-cyan-500',
+            buttonHover: 'hover:from-blue-700 hover:to-cyan-600',
+            closeButton: 'bg-gray-800/50 hover:bg-gray-800 text-gray-400 hover:text-white'
+        }
+    }
+
+    const currentStyle = modalStyles[theme]
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
@@ -87,12 +131,12 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="relative w-full max-w-2xl bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl shadow-2xl border border-gray-800 overflow-hidden pointer-events-auto"
+                            className={`relative w-full max-w-2xl rounded-2xl shadow-2xl border overflow-hidden pointer-events-auto ${currentStyle.background} ${currentStyle.border}`}
                         >
                             {/* Close button */}
                             <button
                                 onClick={onClose}
-                                className="absolute top-4 right-4 p-2 rounded-full bg-gray-800/50 hover:bg-gray-800 text-gray-400 hover:text-white transition-colors z-10"
+                                className={`absolute top-4 right-4 p-2 rounded-full transition-colors z-10 ${currentStyle.closeButton}`}
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -103,14 +147,14 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                     <motion.div
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
-                                        className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-500/20 mb-6"
+                                        className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${currentStyle.successBackground}`}
                                     >
-                                        <CheckCircle className="w-10 h-10 text-green-500" />
+                                        <CheckCircle className={`w-10 h-10 ${currentStyle.successText}`} />
                                     </motion.div>
-                                    <h3 className="text-2xl font-light text-white mb-4">
+                                    <h3 className={`text-2xl font-light mb-4 ${currentStyle.textPrimary}`}>
                                         Consultation Requested Successfully!
                                     </h3>
-                                    <p className="text-gray-400">
+                                    <p className={currentStyle.textSecondary}>
                                         Our investment team will contact you within 24 hours.
                                     </p>
                                 </div>
@@ -119,14 +163,14 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                     {/* Header */}
                                     <div className="p-8 pb-0">
                                         <div className="flex items-center gap-3 mb-6">
-                                            <div className="p-3 rounded-xl bg-blue-500/20">
-                                                <Calendar className="w-6 h-6 text-blue-400" />
+                                            <div className={`p-3 rounded-xl ${theme === 'light' ? 'bg-blue-100' : 'bg-blue-500/20'}`}>
+                                                <Calendar className={`w-6 h-6 ${currentStyle.accent}`} />
                                             </div>
                                             <div>
-                                                <h2 className="text-2xl font-light text-white">
+                                                <h2 className={`text-2xl font-light ${currentStyle.textPrimary}`}>
                                                     Schedule Consultation
                                                 </h2>
-                                                <p className="text-gray-400 text-sm">
+                                                <p className={`text-sm ${currentStyle.textSecondary}`}>
                                                     Connect with our investment advisors
                                                 </p>
                                             </div>
@@ -138,7 +182,7 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             {/* Name */}
                                             <div className="space-y-2">
-                                                <label className="flex items-center gap-2 text-sm text-gray-400">
+                                                <label className={`flex items-center gap-2 text-sm ${currentStyle.textTertiary}`}>
                                                     <User className="w-4 h-4" />
                                                     Full Name *
                                                 </label>
@@ -148,14 +192,14 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                                     value={formData.name}
                                                     onChange={handleChange}
                                                     required
-                                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                    className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${currentStyle.inputBackground} ${currentStyle.inputBorder} ${currentStyle.inputText} ${currentStyle.placeholder}`}
                                                     placeholder="John Smith"
                                                 />
                                             </div>
 
                                             {/* Email */}
                                             <div className="space-y-2">
-                                                <label className="flex items-center gap-2 text-sm text-gray-400">
+                                                <label className={`flex items-center gap-2 text-sm ${currentStyle.textTertiary}`}>
                                                     <Mail className="w-4 h-4" />
                                                     Email Address *
                                                 </label>
@@ -165,14 +209,14 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                                     value={formData.email}
                                                     onChange={handleChange}
                                                     required
-                                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                    className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${currentStyle.inputBackground} ${currentStyle.inputBorder} ${currentStyle.inputText} ${currentStyle.placeholder}`}
                                                     placeholder="john@example.com"
                                                 />
                                             </div>
 
                                             {/* Phone */}
                                             <div className="space-y-2">
-                                                <label className="flex items-center gap-2 text-sm text-gray-400">
+                                                <label className={`flex items-center gap-2 text-sm ${currentStyle.textTertiary}`}>
                                                     <Phone className="w-4 h-4" />
                                                     Phone Number *
                                                 </label>
@@ -182,21 +226,21 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                                     value={formData.phone}
                                                     onChange={handleChange}
                                                     required
-                                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                                    className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${currentStyle.inputBackground} ${currentStyle.inputBorder} ${currentStyle.inputText} ${currentStyle.placeholder}`}
                                                     placeholder="+1 (555) 123-4567"
                                                 />
                                             </div>
 
                                             {/* Investment Type */}
                                             <div className="space-y-2">
-                                                <label className="text-sm text-gray-400">
+                                                <label className={`text-sm ${currentStyle.textTertiary}`}>
                                                     Preferred Investment Type
                                                 </label>
                                                 <select
                                                     name="investmentType"
                                                     value={formData.investmentType}
                                                     onChange={handleChange}
-                                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none"
+                                                    className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none ${currentStyle.inputBackground} ${currentStyle.inputBorder} ${currentStyle.inputText}`}
                                                 >
                                                     <option value="multifamily">Multifamily Properties</option>
                                                     <option value="commercial">Commercial Real Estate</option>
@@ -209,7 +253,7 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
 
                                         {/* Message */}
                                         <div className="space-y-2">
-                                            <label className="text-sm text-gray-400">
+                                            <label className={`text-sm ${currentStyle.textTertiary}`}>
                                                 Additional Notes or Questions
                                             </label>
                                             <textarea
@@ -217,7 +261,7 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                                 value={formData.message}
                                                 onChange={handleChange}
                                                 rows={3}
-                                                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+                                                className={`w-full px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none ${currentStyle.inputBackground} ${currentStyle.inputBorder} ${currentStyle.inputText} ${currentStyle.placeholder}`}
                                                 placeholder="Tell us about your investment goals, timeline, or any specific questions..."
                                             />
                                         </div>
@@ -227,7 +271,7 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                             <button
                                                 type="submit"
                                                 disabled={isSubmitting}
-                                                className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl font-medium hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                                                className={`w-full py-4 px-6 rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 ${currentStyle.buttonBackground} ${currentStyle.buttonHover} text-white`}
                                             >
                                                 {isSubmitting ? (
                                                     <>
@@ -241,7 +285,7 @@ const ConsultationModal = ({ isOpen, onClose }: ConsultationModalProps) => {
                                                     </>
                                                 )}
                                             </button>
-                                            <p className="text-xs text-gray-500 text-center mt-3">
+                                            <p className={`text-xs text-center mt-3 ${currentStyle.textTertiary}`}>
                                                 By submitting, you agree to our Privacy Policy
                                             </p>
                                         </div>

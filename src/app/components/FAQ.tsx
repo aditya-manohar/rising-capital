@@ -247,12 +247,22 @@ const FAQ = () => {
                             Still have questions?
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <button className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 ${theme === 'light'
-                                ? 'border border-gray-900 text-gray-900 hover:bg-gray-50'
-                                : 'border border-white text-white hover:bg-white/10'
-                                }`}>
+                            <button
+                                onClick={() =>
+                                    window.open(
+                                        'https://www.linkedin.com/in/jinil-patel-5b13451a8/',
+                                        '_blank',
+                                        'noopener,noreferrer'
+                                    )
+                                }
+                                className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors duration-300 ${theme === 'light'
+                                    ? 'border border-gray-900 text-gray-900 hover:bg-gray-50'
+                                    : 'border border-white text-white hover:bg-white/10'
+                                    }`}
+                            >
                                 Contact Investor Relations
                             </button>
+
 
                             <button
                                 onClick={() => setIsModalOpen(true)}
