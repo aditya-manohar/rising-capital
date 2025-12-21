@@ -105,7 +105,7 @@ const AdminFloatingButton = () => {
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
-                            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold"
+                            className="absolute -top-4 -right-6 w-6 h-6 z-41 bg-red-500 rounded-full flex items-center justify-center text-xs font-bold"
                         >
                             {consultations.length > 99 ? '99+' : consultations.length}
                         </motion.div>

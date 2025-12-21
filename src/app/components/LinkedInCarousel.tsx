@@ -2,7 +2,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useTheme } from '../context/ThemeContext'
-import { ChevronRight, ChevronLeft, Linkedin, Users, Target, TrendingUp } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Linkedin } from 'lucide-react'
 
 const LinkedInCarousel = () => {
     const { theme } = useTheme()
@@ -311,27 +311,6 @@ const LinkedInCarousel = () => {
                         How operational excellence in a pizza shop translates directly to
                         successful multifamily real estate management.
                     </p>
-                </div>
-
-                {/* Key Insights Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                    {[
-                        { icon: Users, title: 'People First', desc: 'Customer/resident experience is paramount' },
-                        { icon: Target, title: 'Systems & Process', desc: 'Consistency through established procedures' },
-                        { icon: TrendingUp, title: 'Team Culture', desc: 'Reduces turnover at all levels' },
-                        { icon: Linkedin, title: 'LinkedIn Verified', desc: 'Authentic professional insight' }
-                    ].map((item, idx) => (
-                        <div
-                            key={idx}
-                            className={`p-6 rounded-xl border ${currentStyle.border} ${currentStyle.cardBackground} text-center transition-all hover:shadow-md`}
-                        >
-                            <div className={`inline-flex p-3 rounded-lg mb-4 ${theme === 'light' ? 'bg-gray-100' : 'bg-gray-700'}`}>
-                                <item.icon className={`w-6 h-6 ${currentStyle.linkedinColor}`} />
-                            </div>
-                            <h3 className={`font-medium mb-2 ${currentStyle.textPrimary}`}>{item.title}</h3>
-                            <p className={`text-sm ${currentStyle.textSecondary}`}>{item.desc}</p>
-                        </div>
-                    ))}
                 </div>
 
                 {/* Infinite Carousel */}

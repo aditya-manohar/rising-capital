@@ -23,9 +23,10 @@ export default function Home() {
         {/* <Stats /> */}
         <CEOSection />
         <About />
-        {/* <VideoIntro /> */}
-        <VideoSeries />
         {/* <Features /> */}
+        <div id='investment-portfolio'>
+          <VideoSeries />
+        </div>
         <LinkedInEmbed />
         {/* <Testimonials /> */}
         {/* <BlogSection /> */}

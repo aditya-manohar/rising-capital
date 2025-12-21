@@ -1,9 +1,9 @@
-// components/Hero.tsx - Fixed with hydration error resolved
+// components/Hero.tsx - Fixed with href links
 'use client'
 import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
-import ConsultationModal from './Consultationmodal'
+import ConsultationModal from '@/app/components/Consultationmodal'
 
 const Hero = () => {
     const [isMuted] = useState(false)
@@ -56,14 +56,20 @@ const Hero = () => {
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-6 sm:pt-8">
-                                <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 min-w-[200px] sm:min-w-0">
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 min-w-[200px] sm:min-w-0"
+                                >
                                     <span>Schedule Consultation</span>
                                     <ArrowRight className="w-4 h-4" />
                                 </button>
 
-                                <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0">
-                                    View Investment Portfolio
-                                </button>
+                                {/* SIMPLE href FIX FOR SSR */}
+                                <a href="#investment-portfolio">
+                                    <button className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0">
+                                        View Investment Portfolio
+                                    </button>
+                                </a>
                             </div>
                         </div>
 
@@ -166,6 +172,7 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-6 sm:pt-8"
                         >
+                            {/* Consultation Button */}
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
@@ -176,13 +183,19 @@ const Hero = () => {
                                 <ArrowRight className="w-4 h-4" />
                             </motion.button>
 
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0"
-                            >
-                                View Investment Portfolio
-                            </motion.button>
+                            {/* SIMPLE href FIX - Wrap button with anchor tag */}
+                            <a href="#investment-portfolio">
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-white text-white text-sm font-medium hover:bg-white/10 transition-all duration-300 min-w-[200px] sm:min-w-0 group"
+                                >
+                                    <span className="flex items-center justify-center gap-2">
+                                        View Investment Portfolio
+                                        <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+                                    </span>
+                                </motion.button>
+                            </a>
                         </motion.div>
                     </motion.div>
 
@@ -223,9 +236,6 @@ const Hero = () => {
                 className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10"
             >
                 <div className="flex flex-col items-center">
-                    <span className="text-xs font-medium tracking-wider mb-2 sm:mb-4 text-white/70">
-                        Scroll to explore
-                    </span>
                     <motion.div
                         animate={{ y: [0, 6, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
@@ -254,6 +264,8 @@ const Hero = () => {
                     }}
                 />
             </div>
+
+            {/* Consultation Modal */}
             <ConsultationModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
