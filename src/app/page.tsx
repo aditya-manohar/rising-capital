@@ -12,6 +12,7 @@ import Footer from '@/app/components/Footer';
 import VideoSeries from './components/VideoSeries';
 import CEOSection from './components/CEOSection';
 import LinkedInEmbed from './components/LinkedInCarousel';
+import AdminDashboard from './components/AdminDashboard';
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
         {/* <Testimonials /> */}
         {/* <BlogSection /> */}
         <FAQ />
+        <AdminDashboard />
       </main>
       <Footer />
     </div>

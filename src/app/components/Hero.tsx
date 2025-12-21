@@ -3,11 +3,13 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
+import ConsultationModal from './Consultationmodal'
 
 const Hero = () => {
     const [isMuted] = useState(false)
     const [mounted, setMounted] = useState(false)
     const videoRef = useRef<HTMLVideoElement>(null)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         setMounted(true)
@@ -158,7 +160,6 @@ const Hero = () => {
                             and professional portfolio management for sophisticated investors.
                         </motion.p>
 
-                        {/* CTA Buttons */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -168,6 +169,7 @@ const Hero = () => {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                onClick={() => setIsModalOpen(true)}
                                 className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-gray-900 text-sm font-medium hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 min-w-[200px] sm:min-w-0"
                             >
                                 <span>Schedule Consultation</span>
@@ -252,6 +254,10 @@ const Hero = () => {
                     }}
                 />
             </div>
+            <ConsultationModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+            />
         </section>
     )
 }
