@@ -2,7 +2,7 @@
 'use client'
 import { useTheme } from '../context/ThemeContext'
 import { motion } from 'framer-motion'
-import { Phone, Users, Target, TrendingUp, ChevronRight, Calendar, Shield } from 'lucide-react'
+import { Phone, Users, Target, TrendingUp, Calendar } from 'lucide-react'
 import { useState } from 'react'
 import ConsultationModal from '@/app/components/Consultationmodal'
 
