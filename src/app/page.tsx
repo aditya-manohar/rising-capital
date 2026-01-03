@@ -13,6 +13,7 @@ import VideoSeries from './components/VideoSeries';
 import CEOSection from './components/CEOSection';
 import LinkedInEmbed from './components/LinkedInCarousel';
 import AdminDashboard from './components/AdminDashboard';
+import InvestorJourney from './components/InvestorJourney';
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         {/* <Stats /> */}
         <CEOSection />
         <About />
+        <InvestorJourney />
         {/* <Features /> */}
         <div id='investment-portfolio'>
           <VideoSeries />
