@@ -145,7 +145,7 @@ const InvestorJourney = () => {
                                     >
                                         <div className={`h-full p-6 md:p-8 rounded-xl border ${currentStyle.border} ${currentStyle.cardBackground} flex flex-col transition-all duration-300 ${currentStyle.cardHover} hover:-translate-y-1`}>
                                             {/* Step Number */}
-                                            <div className={`absolute -top-3 -left-3 w-12 h-12 rounded-full flex items-center justify-center text-base font-semibold ${currentStyle.stepNumberBg} ${currentStyle.stepNumberColor} border-4 ${currentStyle.background}`}>
+                                            <div className={`absolute -top-3 -left-3 w-12 h-12 rounded-full flex items-center justify-center text-base font-semibold ${currentStyle.stepNumberBg} ${currentStyle.stepNumberColor} border-4 ${theme === 'light' ? 'border-white' : 'border-gray-900'}`}>
                                                 {step.step}
                                             </div>
 
