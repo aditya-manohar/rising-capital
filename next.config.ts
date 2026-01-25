@@ -4,8 +4,8 @@ const nextConfig = {
   output: 'export',
   images: { unoptimized: true },
   trailingSlash: true,
-  basePath: isGitHubPages ? '/ui' : '',
-  assetPrefix: isGitHubPages ? '/ui/' : '',
+  basePath: isGitHubPages ? '' : '',
+  assetPrefix: isGitHubPages ? '' : '',
 }
 
 export default nextConfig
